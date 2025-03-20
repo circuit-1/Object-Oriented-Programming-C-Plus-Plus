@@ -1,12 +1,14 @@
 #include <string>
 #include "RPG.h"
+#include <iostream>
 using namespace std;
+
 
 RPG::RPG(){
     name = "NPC";
     health = 100;
-    strength = 10;
-    defense = 10;
+    strength = 25;
+    defense = 0;
     type = "warrior";
     skills[0] = "slash";
     skills[1] = "parry";
@@ -52,15 +54,35 @@ void RPG::printAction(string skill, RPG opponent){
 void RPG::updateHealth(int new_health){
     health = new_health;
 }
-/*
-void RPG::attack(RPG*){
-
+/**
+ * @brief attack decreases the opponent's health by (strength - opponent's defense)
+ * In other words, the opponents defense should soften the blow from the attack
+ * 
+ * First calculatate the opponent's health, then use (*opponent).getUpdate(new_health)
+ * to update their health
+ */
+void RPG::attack(RPG * opponent){
+    int new_health = (*opponent).getHealth() - (strength - (*opponent).getDefense()); 
+    (*opponent).updateHealth(new_health);
 }
-void RPG::useSkill(RPG*){
+/**
+ * @brief Prompts the user to choose a skill and calls PrintAction() and attack()
+ * 
+ * @param opponent
+ */
+void RPG::useSkill(RPG * opponent){
+    for(int i = 0;i < SKILL_SIZE; i++){
+        printf("Skill %i: %s\n", i, skills[i].c_str());
+    }
+    int chosen_skill_index;
 
+    printf("Choose a skill to use: Enter 0 or 1\n");
+    cin >> chosen_skill_index;
+
+    string chosen_skill = skills[chosen_skill_index];
+    printAction(chosen_skill, (*opponent));
+    attack(opponent);
 }
-*/
-
 /**
 * @brief returns whether health is greater than 0
 *
